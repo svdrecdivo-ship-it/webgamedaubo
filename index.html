@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> GAME ĐẦU BÒ </title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #121212; color: #fff; text-align: center; margin: 0; padding: 20px; }
+        h1 { color: #00ffcc; text-transform: uppercase; letter-spacing: 3px; margin-top: 30px; }
+        .subtitle { color: #888; margin-bottom: 40px; font-size: 0.9em; }
+
+        /* Lưới hiển thị các thẻ game */
+        .game-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 25px; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+        }
+
+        /* Hiệu ứng thẻ game */
+        .game-card { 
+            background: #1e1e1e; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            border: 1px solid #333; 
+            transition: 0.3s; 
+            cursor: pointer;
+        }
+        .game-card:hover { 
+            transform: translateY(-8px); 
+            border-color: #00ffcc; 
+            box-shadow: 0 10px 25px rgba(0,255,204,0.2); 
+        }
+        .game-card img { width: 100%; height: 160px; object-fit: cover; }
+        .game-card h3 { margin: 15px 0 5px 0; color: #00ffcc; }
+        .game-card p { margin: 0 0 15px 0; color: #aaa; font-size: 0.85em; }
+
+        /* Màn hình chơi game (Modal) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; }
+        .modal-content { width: 95%; height: 90%; margin: 2% auto; background: #000; position: relative; border-radius: 10px; overflow: hidden; border: 2px solid #333; }
+        iframe { width: 100%; height: 100%; border: none; }
+        .close-btn { position: absolute; top: 10px; right: 20px; color: #ff4d4d; font-size: 30px; cursor: pointer; font-weight: bold; z-index: 1001; }
+    </style>
+</head>
+<body>
+
+    <h1>🎮 GAME ĐẦU BÒ</h1>
+    <p class="subtitle">Sưu tầm bởi Trần Bảo Nam | Playsaurus Collection</p>
+
+    <div class="game-grid">
+        <div class="game-card" onclick="openGame('https://mrmine.com/game/')">
+            <img src="https://mrmine.com/wp-content/uploads/2020/12/mr-mine-logo.png" alt="Mr. Mine">
+            <h3>Mr. Mine</h3>
+            <p>Khai thác hầm mỏ vô tận</p>
+        </div>
+
+        <div class="game-card" onclick="openGame('https://cdn.clickerheroes.com/gamebuild/index.php')">
+            <img src="https://playsaurus.com/images/CH_Logo.png" alt="Clicker Heroes">
+            <h3>Clicker Heroes</h3>
+            <p>Huyền thoại dòng game Idle</p>
+        </div>
+
+        <div class="game-card" onclick="openGame('https://playsaurus.com/kongPokerQuest63/')">
+            <img src="https://playsaurus.com/images/PQ_Logo.png" alt="Poker Quest">
+            <h3>Poker Quest</h3>
+            <p>Chiến thuật thẻ bài Poker</p>
+        </div>
+
+        <div class="game-card" onclick="openGame('https://grindcraft.com/game.php')">
+            <img src="https://grindcraft.com/assets/img/logo.png" alt="Grindcraft">
+            <h3>Grindcraft</h3>
+            <p>Chế tạo và xây dựng thế giới</p>
+        </div>
+    </div>
+
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeGame()">&times;</span>
+            <iframe id="gameFrame" src="" allow="autoplay; fullscreen; gamepad"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openGame(url) {
+            document.getElementById('gameFrame').src = url;
+            document.getElementById('gameModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeGame() {
+            document.getElementById('gameModal').style.display = 'none';
+            document.getElementById('gameFrame').src = '';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
