@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GAME ĐẦU BÒ </title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, sans-serif; 
@@ -15,7 +18,7 @@
             overflow-x: hidden;
             transition: background 0.6s ease;
             min-height: 100vh;
-            cursor: pointer; /* Click vào nền để đổi màu */
+            cursor: pointer;
             background: #fdfcf0;
         }
 
@@ -48,13 +51,15 @@
         .playing { animation: spin 4s linear infinite; background: #00ffcc !important; color: #000 !important; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* TIÊU ĐỀ CÓ 2 MÁY CHƠI GAME */
         h1 { 
-            color: #000; text-transform: uppercase; letter-spacing: 8px; 
+            color: #000; text-transform: uppercase; letter-spacing: 5px; 
             margin: 50px 0; font-size: 3.5em; text-shadow: 4px 4px 0px #fff;
             pointer-events: none;
+            display: flex; align-items: center; justify-content: center; gap: 20px;
         }
 
-        /* LƯỚI GAME - ĐẢM BẢO CÓ ĐỦ 5 CARD */
+        /* LƯỚI GAME */
         .game-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
@@ -96,7 +101,7 @@
         <div class="music-btn" onclick="nextTrack()">⏭️</div>
     </div>
 
-    <h1>🎮 GAME ĐẦU BÒ</h1>
+    <h1>🎮 GAME ĐẦU BÒ 🎮</h1>
 
     <div class="game-grid" onclick="event.stopPropagation()">
         <div class="game-card" onclick="openGame('https://frayfight.com/game/')">
@@ -134,7 +139,7 @@
     </footer>
 
     <script>
-        // 1. ĐỔI MÀU NỀN
+        // 1. ĐỔI MÀU NỀN KHI CLICK
         const colors = ['#fdfcf0', '#e3f2fd', '#fce4ec', '#f1f8e9', '#fff3e0', '#f3e5f5', '#e0f2f1', '#fffde7'];
         function changeBg() {
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -184,7 +189,7 @@
         }
         music.onended = nextTrack;
 
-        // 4. MODAL
+        // 4. MODAL MỞ GAME
         function openGame(url) {
             document.getElementById('gameFrame').src = url;
             document.getElementById('gameModal').style.display = 'block';
