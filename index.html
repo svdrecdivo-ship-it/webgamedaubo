@@ -4,171 +4,123 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAME ĐẦU BÒ </title>
+    <title>GAME ĐẦU BÒ</title>
     <style>
         body { 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; padding: 20px; padding-bottom: 150px; 
-            overflow-x: hidden; min-height: 100vh;
-            transition: background 2s ease;
-            background-color: #fdfcf0;
-            text-align: center;
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; padding: 20px; text-align: center;
+            transition: background 2s; background-color: #fdfcf0; 
+            min-height: 100vh; overflow-x: hidden;
         }
-
+        
+        /* TIÊU ĐỀ 2 MÁY CHƠI GAME */
+        h1 { display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 3em; margin: 30px 0; }
+        
         /* MEME RƠI SIÊU TO */
-        .particle {
-            position: fixed; top: -250px; z-index: 9999;
-            user-select: none; pointer-events: none;
-            animation: fall linear infinite;
-            border: 4px solid #000; background: #fff; padding: 10px;
-            border-radius: 15px;
+        .meme-img {
+            position: fixed; top: -250px; z-index: 9999; pointer-events: none;
+            animation: fall linear infinite; border: 4px solid #000; background: #fff;
+            border-radius: 20px; padding: 10px;
         }
         @keyframes fall { to { transform: translateY(125vh) rotate(360deg); } }
 
-        /* ĐIỀU KHIỂN NHẠC */
-        .music-panel {
-            position: fixed; bottom: 30px; left: 30px;
-            display: flex; gap: 15px; z-index: 10000;
-            background: #fff; padding: 15px; border: 4px solid #000;
-            border-radius: 50px; box-shadow: 8px 8px 0 #000;
-        }
-        .music-btn {
-            width: 60px; height: 60px; background: #fff; border: 3px solid #000;
-            border-radius: 50%; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; font-size: 24px;
-        }
-
-        h1 { 
-            font-size: 3.5em; text-transform: uppercase; 
-            display: flex; align-items: center; justify-content: center; gap: 20px;
-            margin: 40px 0;
-        }
-
         /* LƯỚI GAME */
-        .game-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 30px; max-width: 1300px; margin: 0 auto;
+        .game-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; max-width: 1200px; margin: 0 auto; 
         }
-        .game-card { 
-            background: #fff; border-radius: 20px; border: 5px solid #000; 
-            overflow: hidden; cursor: pointer; box-shadow: 12px 12px 0 #000;
+        .game-item { 
+            border: 5px solid #000; border-radius: 20px; overflow: hidden; 
+            cursor: pointer; background: #fff; box-shadow: 12px 12px 0 #000; 
             transition: 0.2s;
         }
-        .game-card:hover { transform: scale(1.02); }
-        .game-card img { width: 100%; height: 200px; object-fit: cover; border-bottom: 5px solid #000; }
+        .game-item:hover { transform: scale(1.03); }
+        .game-item img { width: 100%; height: 200px; object-fit: cover; border-bottom: 5px solid #000; }
+        .game-item h3 { margin: 15px 0; text-transform: uppercase; }
 
-        footer {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #fff; border-top: 4px solid #000; padding: 15px 0; z-index: 5000;
+        /* NHẠC CỐ ĐỊNH */
+        .music-ctrl { 
+            position: fixed; bottom: 30px; left: 30px; z-index: 10000; 
+            background: #fff; padding: 15px; border: 4px solid #000; 
+            border-radius: 60px; display: flex; gap: 15px; box-shadow: 8px 8px 0 #000;
         }
+        .m-btn { width: 55px; height: 55px; border-radius: 50%; border: 3px solid #000; cursor: pointer; display: flex; align-items: center; justify-content: center; background: #fff; font-size: 22px; }
 
-        /* MODAL CHƠI GAME */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 20000; }
-        .modal-content { width: 95%; height: 85%; margin: 2% auto; position: relative; border: 5px solid #fff; background: #000; }
-        .close-btn { position: absolute; top: -50px; right: 0; color: #fff; font-size: 35px; cursor: pointer; font-weight: bold; }
+        /* MODAL MỞ GAME (EMBED) */
+        .game-overlay { 
+            display: none; position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 20000; 
+        }
+        .game-box { width: 95%; height: 85%; margin: 2% auto; position: relative; border: 5px solid #fff; background: #000; }
+        .close-game { position: absolute; top: -50px; right: 0; color: #fff; font-size: 35px; cursor: pointer; font-weight: bold; }
+
+        footer { margin-top: 50px; padding: 20px; border-top: 4px solid #000; background: #fff; position: relative; z-index: 1000; }
     </style>
 </head>
-<body id="main-body">
+<body id="b">
 
-    <audio id="bg-music" loop></audio>
+    <audio id="player" loop></audio>
 
-    <div class="music-panel">
-        <div id="play-btn" class="music-btn" onclick="toggleMusic()">▶️</div>
-        <div class="music-btn" onclick="nextTrack()">⏭️</div>
+    <div class="music-ctrl">
+        <div class="m-btn" onclick="p()">▶️</div>
+        <div class="m-btn" onclick="n()">⏭️</div>
     </div>
 
     <h1>🎮 GAME ĐẦU BÒ 🎮</h1>
 
-    <div class="game-grid">
-        <div class="game-card" onclick="openGame('https://frayfight.com/game/')">
-            <img src="fray-fight-bua.png">
-            <h2>FRAY FIGHT</h2>
-        </div>
-        <div class="game-card" onclick="openGame('https://mrmine.com/game/')">
-            <img src="mr-mine-bua.png">
-            <h2>MR. MINE</h2>
-        </div>
-        <div class="game-card" onclick="openGame('https://cdn.clickerheroes.com/gamebuild/index.php')">
-            <img src="clicker-heroes-bua.png">
-            <h2>CLICKER HEROES</h2>
-        </div>
-        <div class="game-card" onclick="openGame('https://playsaurus.com/kongPokerQuest63/')">
-            <img src="poker-quest-bua.png">
-            <h2>POKER QUEST</h2>
-        </div>
-        <div class="game-card" onclick="openGame('https://grindcraft.com/game.php')">
-            <img src="grindcraft-bua.png">
-            <h2>GRINDCRAFT</h2>
-        </div>
+    <div class="game-container">
+        <div class="game-item" onclick="openG('https://frayfight.com/game/')"><img src="fray-fight-bua.png"><h3>FRAY FIGHT</h3></div>
+        <div class="game-item" onclick="openG('https://mrmine.com/game/')"><img src="mr-mine-bua.png"><h3>MR. MINE</h3></div>
+        <div class="game-item" onclick="openG('https://cdn.clickerheroes.com/gamebuild/index.php')"><img src="clicker-heroes-bua.png"><h3>CLICKER HEROES</h3></div>
+        <div class="game-item" onclick="openG('https://playsaurus.com/kongPokerQuest63/')"><img src="poker-quest-bua.png"><h3>POKER QUEST</h3></div>
+        <div class="game-item" onclick="openG('https://grindcraft.com/game.php')"><img src="grindcraft-bua.png"><h3>GRINDCRAFT</h3></div>
     </div>
 
-    <div id="gameModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeGame()">[ ĐÓNG ]</span>
-            <iframe id="gameFrame" src="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+    <div id="ovl" class="game-overlay">
+        <div class="game-box">
+            <span class="close-game" onclick="closeG()">[ ĐÓNG ]</span>
+            <iframe id="ifr" src="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
     <footer>
-        <div style="font-weight: bold; letter-spacing: 2px;">DESIGNED BY NAM TRAN </div>
-        <div style="font-size: 0.8em; color: #666; margin-top: 5px;">svdrecdivo@gmal.com</div>
+        <div style="font-weight: bold; letter-spacing: 2px;">DESIGNED BY NAM TRAN ko Hề</div>
+        <div style="font-size: 0.9em; margin-top: 5px;">svdrecdivo@gmal.com</div>
     </footer>
 
     <script>
-        const playlist = ['nhac1.mp3', 'nhac2.mp3', 'nhac3.mp3'];
-        let currentTrack = 0;
-        const music = document.getElementById('bg-music');
-        const playBtn = document.getElementById('play-btn');
-        let interactionDone = false;
+        // QUẢN LÝ NHẠC
+        let s = ['nhac1.mp3', 'nhac2.mp3', 'nhac3.mp3'];
+        let cur = 0;
+        let a = document.getElementById('player');
+        let started = false;
 
-        music.src = playlist[currentTrack];
+        a.src = s[cur];
 
-        // CLICK BẤT KỲ ĐỂ KÍCH HOẠT NHẠC
-        document.addEventListener('click', function() {
-            if (!interactionDone) {
-                music.play().catch(e => console.log("Chờ click tiếp"));
-                playBtn.innerText = '⏸️';
-                interactionDone = true;
-            }
-        }, { once: true });
+        function p() { if (a.paused) { a.play(); } else { a.pause(); } }
+        function n() { cur = (cur + 1) % s.length; a.src = s[cur]; a.play(); }
 
-        function toggleMusic() {
-            if (music.paused) { music.play(); playBtn.innerText = '⏸️'; }
-            else { music.pause(); playBtn.innerText = '▶️'; }
-        }
-
-        function nextTrack() {
-            currentTrack = (currentTrack + 1) % playlist.length;
-            music.src = playlist[currentTrack];
-            music.play();
-            playBtn.innerText = '⏸️';
-        }
-
-        // TỰ ĐỔI MÀU NỀN SAU 3 GIÂY
-        const colors = ['#fdfcf0', '#e3f2fd', '#fce4ec', '#f1f8e9', '#fff3e0', '#f3e5f5', '#e0f2f1', '#fffde7'];
+        // TỰ ĐỔI MÀU NỀN
+        let clr = ['#fdfcf0', '#e3f2fd', '#fce4ec', '#f1f8e9', '#fff3e0', '#f3e5f5', '#e0f2f1'];
         setInterval(() => {
-            document.body.style.background = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.background = clr[Math.floor(Math.random() * clr.length)];
         }, 3000);
 
-        // MEME RƠI - TO VÀ RÕ
-        const memeImages = ['meme1.png','meme2.png','meme3.png','meme4.png','meme5.png'];
-        function spawnMeme() {
-            const img = document.createElement('img');
-            img.className = 'particle';
-            img.src = memeImages[Math.floor(Math.random() * memeImages.length)];
-            img.style.width = '150px'; // Ép kích thước to 150px
-            img.style.left = Math.random() * 90 + 'vw';
-            img.style.animationDuration = Math.random() * 2 + 4 + 's';
-            document.body.appendChild(img);
-            setTimeout(() => img.remove(), 7000);
+        // MEME RƠI SIÊU TO (150PX)
+        let mImg = ['meme1.png','meme2.png','meme3.png','meme4.png','meme5.png'];
+        function spawn() {
+            let m = document.createElement('img');
+            m.className = 'meme-img';
+            m.src = mImg[Math.floor(Math.random() * mImg.length)];
+            m.style.width = '150px'; 
+            m.style.left = Math.random() * 90 + 'vw';
+            m.style.animationDuration = Math.random() * 2 + 4 + 's';
+            document.body.appendChild(m);
+            setTimeout(() => m.remove(), 7000);
         }
-        setInterval(spawnMeme, 1500);
+        setInterval(spawn, 1500);
 
-        // MỞ GAME
-        function openGame(url) {
-            document.getElementById('gameFrame').src = url;
-            document.getElementById('gameModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-        function closeGame() {
-            document.getElementById('game
+        // MỞ VÀ ĐÓNG GAME (EMBED)
+        function openG(url) {
+            document.getElementById('ifr
