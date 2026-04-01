@@ -13,28 +13,49 @@
             padding: 20px; 
             padding-bottom: 100px; 
             overflow-x: hidden;
-            transition: background 1s ease; /* Hiệu ứng đổi màu nền mượt */
+            transition: background 1s ease;
             min-height: 100vh;
         }
 
-        /* HIỆU ỨNG VẬT THỂ RƠI (ẢNH MEME) */
+        /* HIỆU ỨNG MEME RƠI */
         .particle {
             position: fixed;
-            top: -150px; /* Bắt đầu rơi từ trên cao */
-            z-index: -1; /* Nằm dưới các thẻ game */
+            top: -150px;
+            z-index: -1;
             user-select: none;
             pointer-events: none;
             animation: fall linear infinite;
-            /* Bo góc và viền cho ảnh Meme nhìn cho vui */
             border-radius: 10px;
             border: 2px solid #000;
             background: #fff;
             padding: 5px;
         }
-
         @keyframes fall {
-            to { transform: translateY(120vh) rotate(360deg); } /* Rơi xuống hết màn hình và tự xoay */
+            to { transform: translateY(120vh) rotate(360deg); }
         }
+
+        /* NÚT ĐIỀU KHIỂN NHẠC */
+        #music-control {
+            position: fixed;
+            bottom: 85px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border: 4px solid #000;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 5px 5px 0 #000;
+            transition: 0.2s;
+        }
+        #music-control:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
+        .playing { animation: spin 4s linear infinite; background: #00ff00 !important; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         h1 { 
             color: #000; 
@@ -43,7 +64,6 @@
             margin: 40px 0; 
             font-size: 3.5em;
             text-shadow: 3px 3px 0px #fff;
-            position: relative;
         }
 
         .game-grid { 
@@ -52,7 +72,6 @@
             gap: 40px; 
             max-width: 1400px; 
             margin: 0 auto; 
-            position: relative;
         }
         
         .game-card { 
@@ -64,25 +83,10 @@
             cursor: pointer; 
             box-shadow: 8px 8px 0 #000;
         }
+        .game-card:hover { transform: translateY(-15px) rotate(2deg); box-shadow: 12px 12px 0 #000; background: #fff; }
+        .game-card img { width: 100%; height: 250px; object-fit: cover; border-bottom: 4px solid #000; }
 
-        .game-card:hover { 
-            transform: translateY(-15px) rotate(2deg); 
-            box-shadow: 12px 12px 0 #000;
-            background: #fff;
-        }
-
-        .game-card img { 
-            width: 100%; 
-            height: 250px; 
-            object-fit: cover; 
-            border-bottom: 4px solid #000;
-        }
-
-        .game-info { padding: 25px; }
-        .game-info h3 { margin: 0; font-size: 1.8em; text-transform: uppercase; }
-
-        /* Modal chơi game */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1002; }
         .modal-content { width: 95%; height: 85%; margin: 3% auto; background: #000; border: 5px solid #fff; border-radius: 20px; position: relative; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
         .close-btn { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 35px; cursor: pointer; font-weight: bold; }
@@ -99,6 +103,10 @@
 </head>
 <body>
 
+    <audio id="bg-music" loop></audio>
+
+    <div id="music-control" onclick="toggleMusic()">🎵</div>
+
     <h1>🎮 GAME ĐẦU BÒ</h1>
 
     <div class="game-grid">
@@ -106,17 +114,14 @@
             <img src="mr-mine-bua.png" alt="Mr. Mine">
             <div class="game-info"><h3>Mr. Mine</h3><p>Khai thác hầm mỏ vô tận</p></div>
         </div>
-
         <div class="game-card" onclick="openGame('https://cdn.clickerheroes.com/gamebuild/index.php')">
             <img src="clicker-heroes-bua.png" alt="Clicker Heroes">
             <div class="game-info"><h3>Clicker Heroes</h3><p>Huyền thoại dòng game Idle</p></div>
         </div>
-
         <div class="game-card" onclick="openGame('https://playsaurus.com/kongPokerQuest63/')">
             <img src="poker-quest-bua.png" alt="Poker Quest">
             <div class="game-info"><h3>Poker Quest</h3><p>Chiến thuật thẻ bài Poker</p></div>
         </div>
-
         <div class="game-card" onclick="openGame('https://grindcraft.com/game.php')">
             <img src="grindcraft-bua.png" alt="Grindcraft">
             <div class="game-info"><h3>Grindcraft</h3><p>Chế tạo và xây dựng thế giới</p></div>
@@ -130,55 +135,49 @@
         </div>
     </div>
 
-    <div class="footer">WEB ĐƯỢC THIẾT KẾ BỞI NAM KHÔNG HỀ 2026</div>
+    <div class="footer">WEB ĐƯỢC THIẾT KẾ BỞI NAM KHÔNG HỀ</div>
 
     <script>
-        // 1. HÀM ĐỔI MÀU NỀN NGẪU NHIÊN KHI VÀO WEB
-        const colors = [
-            'linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%)',
-            'linear-gradient(160deg, #00DBDE 0%, #FC00FF 100%)',
-            'linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%)',
-            'linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%)',
-            'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)'
-        ];
+        // 1. ĐỔI MÀU NỀN
+        const colors = ['linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%)','linear-gradient(160deg, #00DBDE 0%, #FC00FF 100%)','linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%)','linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%)','linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)'];
         document.body.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-        // 2. TẠO VẬT THỂ RƠI (ẢNH MEME TÙY CHỌN)
-        const memeImages = [
-            'meme1.png',
-            'meme2.png',
-            'meme3.png',
-            'meme4.png',
-            'meme5.png'
-        ];
-
+        // 2. MEME RƠI
+        const memeImages = ['meme1.png','meme2.png','meme3.png','meme4.png','meme5.png'];
         function createParticle() {
-            // Tạo thẻ <img> để chứa ảnh Meme
             const particle = document.createElement('img');
             particle.classList.add('particle');
-            
-            // Chọn ngẫu nhiên 1 trong 5 ảnh Meme
             particle.src = memeImages[Math.floor(Math.random() * memeImages.length)];
-            
-            // Kích thước ngẫu nhiên (cho bự ra chút)
-            const size = Math.random() * 50 + 50 + 'px'; // Kích thước từ 50px đến 100px
+            const size = Math.random() * 50 + 50 + 'px';
             particle.style.width = size;
-            particle.style.height = 'auto'; // Giữ nguyên tỷ lệ ảnh
-            
-            // Vị trí rơi ngẫu nhiên
             particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.animationDuration = Math.random() * 5 + 3 + 's'; // Rơi chậm hơn chút nhìn cho rõ
-            particle.style.opacity = Math.random() * 0.7 + 0.3; // Độ mờ ngẫu nhiên
-            
+            particle.style.animationDuration = Math.random() * 5 + 3 + 's';
             document.body.appendChild(particle);
-            
-            // Xóa vật thể sau khi rơi xong để nhẹ máy
-            setTimeout(() => { particle.remove(); }, 8000); // Tăng thời gian xóa cho khớp thời gian rơi
+            setTimeout(() => { particle.remove(); }, 8000);
         }
-        // Tạo Meme rơi liên tục (cứ 500ms tạo 1 cái)
         setInterval(createParticle, 500);
 
-        // 3. HÀM ĐIỀU KHIỂN GAME
+        // 3. ĐIỀU KHIỂN NHẠC NGẪU NHIÊN
+        const playlist = ['nhac1.mp3', 'nhac2.mp3']; // Danh sách 2 bài hát của bạn
+        const music = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-control');
+        
+        // Chọn sẵn một bài ngẫu nhiên khi trang web load
+        music.src = playlist[Math.floor(Math.random() * playlist.length)];
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                musicBtn.classList.add('playing');
+                musicBtn.innerText = '⏸️';
+            } else {
+                music.pause();
+                musicBtn.classList.remove('playing');
+                musicBtn.innerText = '🎵';
+            }
+        }
+
+        // HÀM MỞ/ĐÓNG GAME
         function openGame(url) {
             document.getElementById('gameFrame').src = url;
             document.getElementById('gameModal').style.display = 'block';
