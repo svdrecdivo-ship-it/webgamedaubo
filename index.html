@@ -3,82 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> GAME ĐẦU BÒ </title>
+    <title>KHO GAME ĐẦU BÒ </title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #121212; color: #fff; text-align: center; margin: 0; padding: 20px; }
-        h1 { color: #00ffcc; text-transform: uppercase; letter-spacing: 3px; margin-top: 30px; }
-        .subtitle { color: #888; margin-bottom: 40px; font-size: 0.9em; }
+        /* HIỆU ỨNG NỀN SÁNG NHẤP NHÁY ĐỔI MÀU */
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            color: #000; /* Chữ màu đen trên nền sáng */
+            text-align: center; 
+            margin: 0; 
+            padding: 20px; 
+            padding-bottom: 80px; /* Chừa chỗ cho bản quyền */
+            
+            /* Hiệu ứng gradient nền sáng lấp lánh */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBackground 10s ease infinite;
+        }
 
-        /* Lưới hiển thị các thẻ game */
+        /* Định nghĩa hiệu ứng chuyển động nền */
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 { color: #000; text-transform: uppercase; letter-spacing: 2px; margin-top: 30px; }
+        .subtitle { color: #555; margin-bottom: 50px; font-weight: bold;}
+
+        /* Lưới hiển thị game */
         .game-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
-            gap: 25px; 
-            max-width: 1100px; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Tăng min-width để card bự hơn */
+            gap: 30px; 
+            max-width: 1300px; /* Mở rộng khung lưới */
             margin: 0 auto; 
         }
-
-        /* Hiệu ứng thẻ game */
+        
+        /* Hiệu ứng thẻ game - To hơn */
         .game-card { 
-            background: #1e1e1e; 
-            border-radius: 15px; 
+            background: #fff; /* Nền card màu trắng nổi bật */
+            border-radius: 20px; /* Bo góc nhiều hơn */
             overflow: hidden; 
-            border: 1px solid #333; 
             transition: 0.3s; 
-            cursor: pointer;
+            border: 3px solid #000; /* Viền đen đậm */
+            cursor: pointer; 
         }
         .game-card:hover { 
-            transform: translateY(-8px); 
-            border-color: #00ffcc; 
-            box-shadow: 0 10px 25px rgba(0,255,204,0.2); 
+            transform: scale(1.05); /* Phóng to card khi di chuột */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3); 
         }
-        .game-card img { width: 100%; height: 160px; object-fit: cover; }
-        .game-card h3 { margin: 15px 0 5px 0; color: #00ffcc; }
-        .game-card p { margin: 0 0 15px 0; color: #aaa; font-size: 0.85em; }
 
-        /* Màn hình chơi game (Modal) */
+        /* AVATAR GAME BỰ HƠN */
+        .game-card img { 
+            width: 100%; 
+            height: 220px; /* Tăng chiều cao ảnh lên bự */
+            object-fit: contain; /* Giữ nguyên tỷ lệ ảnh, không bị cắt */
+            padding-top: 15px; /* Thêm khoảng trống ở trên */
+        }
+        .game-info { padding: 20px; }
+        .game-info h3 { margin: 0; font-size: 1.5em; color: #000; }
+        .game-info p { margin-top: 10px; color: #333; font-size: 1em; }
+
+        /* Khung Modal chơi game */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; }
-        .modal-content { width: 95%; height: 90%; margin: 2% auto; background: #000; position: relative; border-radius: 10px; overflow: hidden; border: 2px solid #333; }
+        .modal-content { width: 95%; height: 90%; margin: 2% auto; background: #000; border: 4px solid #fff; border-radius: 15px; position: relative; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
-        .close-btn { position: absolute; top: 10px; right: 20px; color: #ff4d4d; font-size: 30px; cursor: pointer; font-weight: bold; z-index: 1001; }
+        .close-btn { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 30px; cursor: pointer; font-weight: bold; }
+
+        /* BẢN QUYỀN TRÊN THANH DƯỚI CÙNG */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #fff;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-top: 3px solid #000;
+            z-index: 900;
+        }
     </style>
 </head>
 <body>
 
     <h1>🎮 GAME ĐẦU BÒ</h1>
-    <p class="subtitle">Sưu tầm bởi Trần Bảo Nam | Playsaurus Collection</p>
+    <p class="subtitle">Kho game HTML5 không quảng cáo của Nam - Playsaurus Collection</p>
 
     <div class="game-grid">
         <div class="game-card" onclick="openGame('https://mrmine.com/game/')">
             <img src="https://mrmine.com/wp-content/uploads/2020/12/mr-mine-logo.png" alt="Mr. Mine">
-            <h3>Mr. Mine</h3>
-            <p>Khai thác hầm mỏ vô tận</p>
+            <div class="game-info">
+                <h3>Mr. Mine</h3>
+                <p>Khai thác hầm mỏ vô tận</p>
+            </div>
         </div>
 
         <div class="game-card" onclick="openGame('https://cdn.clickerheroes.com/gamebuild/index.php')">
-            <img src="https://playsaurus.com/images/CH_Logo.png" alt="Clicker Heroes">
-            <h3>Clicker Heroes</h3>
-            <p>Huyền thoại dòng game Idle</p>
+            <img src="https://playsaurus.com/images/CH_Artwork_Square.png" alt="Clicker Heroes">
+            <div class="game-info">
+                <h3>Clicker Heroes</h3>
+                <p>Huyền thoại dòng game Idle</p>
+            </div>
         </div>
 
         <div class="game-card" onclick="openGame('https://playsaurus.com/kongPokerQuest63/')">
             <img src="https://playsaurus.com/images/PQ_Logo.png" alt="Poker Quest">
-            <h3>Poker Quest</h3>
-            <p>Chiến thuật thẻ bài Poker</p>
+            <div class="game-info">
+                <h3>Poker Quest</h3>
+                <p>Chiến thuật thẻ bài Poker</p>
+            </div>
         </div>
 
         <div class="game-card" onclick="openGame('https://grindcraft.com/game.php')">
-            <img src="https://grindcraft.com/assets/img/logo.png" alt="Grindcraft">
-            <h3>Grindcraft</h3>
-            <p>Chế tạo và xây dựng thế giới</p>
+            <img src="https://raw.githubusercontent.com/the-maldridge/html5-games/main/games/grindcraft/images/icon-256.png" alt="Grindcraft">
+            <div class="game-info">
+                <h3>Grindcraft</h3>
+                <p>Chế tạo và xây dựng thế giới</p>
+            </div>
         </div>
     </div>
 
     <div id="gameModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeGame()">&times;</span>
-            <iframe id="gameFrame" src="" allow="autoplay; fullscreen; gamepad"></iframe>
+            <span class="close-btn" onclick="closeGame()">[ ĐÓNG ]</span>
+            <iframe id="gameFrame" src="" allowfullscreen></iframe>
         </div>
+    </div>
+
+    <div class="footer">
+        WEB ĐƯỢC THIẾT KẾ BỞI NAM KHÔNG HỀ
     </div>
 
     <script>
