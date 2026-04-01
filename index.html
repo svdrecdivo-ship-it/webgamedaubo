@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAME ĐẦU BÒ </title>
+    <title>GAME ĐẦU BÒ</title>
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, sans-serif; 
@@ -11,101 +11,81 @@
             text-align: center; 
             margin: 0; 
             padding: 20px; 
-            padding-bottom: 100px; 
+            padding-bottom: 120px; 
             overflow-x: hidden;
             transition: background 1s ease;
             min-height: 100vh;
         }
 
-        /* HIỆU ỨNG MEME RƠI */
+        /* MEME RƠI */
         .particle {
-            position: fixed;
-            top: -150px;
-            z-index: -1;
-            user-select: none;
-            pointer-events: none;
+            position: fixed; top: -150px; z-index: -1;
+            user-select: none; pointer-events: none;
             animation: fall linear infinite;
-            border-radius: 10px;
-            border: 2px solid #000;
-            background: #fff;
-            padding: 5px;
+            border-radius: 10px; border: 2px solid #000;
+            background: #fff; padding: 5px;
         }
-        @keyframes fall {
-            to { transform: translateY(120vh) rotate(360deg); }
-        }
+        @keyframes fall { to { transform: translateY(120vh) rotate(360deg); } }
 
-        /* NÚT ĐIỀU KHIỂN NHẠC */
-        #music-control {
+        /* CỤM ĐIỀU KHIỂN NHẠC */
+        .music-wrapper {
             position: fixed;
             bottom: 85px;
             left: 20px;
-            width: 60px;
-            height: 60px;
-            background: #fff;
-            border: 4px solid #000;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1001;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            box-shadow: 5px 5px 0 #000;
+            gap: 15px;
+            z-index: 1001;
+        }
+
+        #music-control {
+            width: 65px; height: 65px;
+            background: #fff; border: 4px solid #000;
+            border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; box-shadow: 6px 6px 0 #000;
             transition: 0.2s;
         }
-        #music-control:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
-        .playing { animation: spin 4s linear infinite; background: #00ff00 !important; }
+        #music-control:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 #000; }
+        .playing { animation: spin 4s linear infinite; background: #00ffcc !important; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        h1 { 
-            color: #000; 
-            text-transform: uppercase; 
-            letter-spacing: 5px; 
-            margin: 40px 0; 
-            font-size: 3.5em;
-            text-shadow: 3px 3px 0px #fff;
+        .music-text {
+            background: #fff; border: 3px solid #000;
+            padding: 8px 15px; border-radius: 15px;
+            font-weight: bold; font-size: 1.1em;
+            box-shadow: 4px 4px 0 #000;
+            white-space: nowrap;
         }
 
-        .game-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-            gap: 40px; 
-            max-width: 1400px; 
-            margin: 0 auto; 
-        }
-        
-        .game-card { 
-            background: rgba(255, 255, 255, 0.9); 
-            border-radius: 25px; 
-            overflow: hidden; 
-            transition: 0.4s; 
-            border: 4px solid #000; 
-            cursor: pointer; 
-            box-shadow: 8px 8px 0 #000;
-        }
+        /* HEADER & GRID */
+        h1 { color: #000; text-transform: uppercase; letter-spacing: 5px; margin: 40px 0; font-size: 3.5em; text-shadow: 3px 3px 0px #fff; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1400px; margin: 0 auto; }
+        .game-card { background: rgba(255, 255, 255, 0.9); border-radius: 25px; overflow: hidden; transition: 0.4s; border: 4px solid #000; cursor: pointer; box-shadow: 8px 8px 0 #000; }
         .game-card:hover { transform: translateY(-15px) rotate(2deg); box-shadow: 12px 12px 0 #000; background: #fff; }
         .game-card img { width: 100%; height: 250px; object-fit: cover; border-bottom: 4px solid #000; }
 
+        /* MODAL */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1002; }
         .modal-content { width: 95%; height: 85%; margin: 3% auto; background: #000; border: 5px solid #fff; border-radius: 20px; position: relative; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
         .close-btn { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 35px; cursor: pointer; font-weight: bold; }
 
         .footer {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%; height: 70px;
-            background: #000; color: #fff;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4em; font-weight: bold; letter-spacing: 2px;
-            z-index: 999;
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: #000; color: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4em; font-weight: bold; letter-spacing: 2px; z-index: 999;
         }
     </style>
 </head>
 <body>
 
-    <audio id="bg-music" loop></audio>
+    <audio id="bg-music"></audio>
 
-    <div id="music-control" onclick="toggleMusic()">🎵</div>
+    <div class="music-wrapper">
+        <div id="music-control" onclick="toggleMusic()">🎵</div>
+        <div class="music-text">Nếu muốn nghe nhạc 👉👍</div>
+    </div>
 
     <h1>🎮 GAME ĐẦU BÒ</h1>
 
@@ -135,10 +115,10 @@
         </div>
     </div>
 
-    <div class="footer">WEB ĐƯỢC THIẾT KẾ BỞI NAM KHÔNG HỀ</div>
+    <div class="footer">WEB ĐƯỢC THIẾT KẾ BỞI NAM KHÔNG HỀO</div>
 
     <script>
-        // 1. ĐỔI MÀU NỀN
+        // 1. NỀN NGẪU NHIÊN
         const colors = ['linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%)','linear-gradient(160deg, #00DBDE 0%, #FC00FF 100%)','linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%)','linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%)','linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)'];
         document.body.style.background = colors[Math.floor(Math.random() * colors.length)];
 
@@ -157,13 +137,14 @@
         }
         setInterval(createParticle, 500);
 
-        // 3. ĐIỀU KHIỂN NHẠC NGẪU NHIÊN
-        const playlist = ['nhac1.mp3', 'nhac2.mp3']; // Danh sách 2 bài hát của bạn
+        // 3. MÁY NGHE NHẠC CHUYỂN BÀI (PLAYLIST)
+        const playlist = ['nhac1.mp3', 'nhac2.mp3', 'nhac3.mp3'];
+        let currentTrack = 0;
         const music = document.getElementById('bg-music');
         const musicBtn = document.getElementById('music-control');
         
-        // Chọn sẵn một bài ngẫu nhiên khi trang web load
-        music.src = playlist[Math.floor(Math.random() * playlist.length)];
+        // Load bài đầu tiên
+        music.src = playlist[currentTrack];
 
         function toggleMusic() {
             if (music.paused) {
@@ -171,13 +152,28 @@
                 musicBtn.classList.add('playing');
                 musicBtn.innerText = '⏸️';
             } else {
-                music.pause();
-                musicBtn.classList.remove('playing');
-                musicBtn.innerText = '🎵';
+                // Click khi đang chơi -> Chuyển sang bài kế tiếp
+                currentTrack++;
+                if (currentTrack >= playlist.length) {
+                    currentTrack = 0; // Quay lại bài 1
+                }
+                music.src = playlist[currentTrack];
+                music.play();
+                musicBtn.classList.add('playing');
+                musicBtn.innerText = '⏸️';
             }
         }
 
-        // HÀM MỞ/ĐÓNG GAME
+        // Tự động chuyển bài khi hết nhạc
+        music.onended = function() {
+            currentTrack++;
+            if (currentTrack >= playlist.length) {
+                currentTrack = 0;
+            }
+            music.src = playlist[currentTrack];
+            music.play();
+        };
+
         function openGame(url) {
             document.getElementById('gameFrame').src = url;
             document.getElementById('gameModal').style.display = 'block';
