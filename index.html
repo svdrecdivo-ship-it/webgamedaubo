@@ -6,18 +6,19 @@
     <title>GAME ĐẦU BÒ</title>
     <style>
         body { 
-            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif; 
             color: #000; 
             text-align: center; 
             margin: 0; 
             padding: 20px; 
-            padding-bottom: 120px; 
+            padding-bottom: 150px; 
             overflow-x: hidden;
-            transition: background 1s ease;
+            transition: background 0.8s ease;
             min-height: 100vh;
+            cursor: pointer;
         }
 
-        /* MEME RƠI */
+        /* HIỆU ỨNG MEME RƠI */
         .particle {
             position: fixed; top: -150px; z-index: -1;
             user-select: none; pointer-events: none;
@@ -27,81 +28,98 @@
         }
         @keyframes fall { to { transform: translateY(120vh) rotate(360deg); } }
 
-        /* CỤM ĐIỀU KHIỂN NHẠC */
-        .music-wrapper {
-            position: fixed;
-            bottom: 85px;
-            left: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 1001;
+        /* BẢNG ĐIỀU KHIỂN NHẠC */
+        .music-panel {
+            position: fixed; bottom: 30px; left: 30px;
+            display: flex; gap: 12px; z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px; border: 3px solid #000;
+            border-radius: 50px; box-shadow: 6px 6px 0 #000;
         }
-
-        #music-control {
-            width: 65px; height: 65px;
-            background: #fff; border: 4px solid #000;
+        .music-btn {
+            width: 45px; height: 45px;
+            background: #fff; border: 2px solid #000;
             border-radius: 50%; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 30px; box-shadow: 6px 6px 0 #000;
-            transition: 0.2s;
+            font-size: 18px; transition: 0.2s;
         }
-        #music-control:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 #000; }
-        .playing { animation: spin 4s linear infinite; background: #00ffcc !important; }
+        .music-btn:hover { background: #000; color: #fff; }
+        .playing { animation: spin 4s linear infinite; background: #00ffcc !important; color: #000 !important; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .music-text {
-            background: #fff; border: 3px solid #000;
-            padding: 8px 15px; border-radius: 15px;
-            font-weight: bold; font-size: 1.1em;
-            box-shadow: 4px 4px 0 #000;
-            white-space: nowrap;
+        /* NỘI DUNG CHÍNH */
+        h1 { 
+            color: #000; text-transform: uppercase; letter-spacing: 8px; 
+            margin: 50px 0; font-size: 4em; text-shadow: 4px 4px 0px #fff;
+            pointer-events: none;
         }
+        .game-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 30px; max-width: 1400px; margin: 0 auto;
+            cursor: default;
+        }
+        .game-card { 
+            background: #fff; border-radius: 20px; 
+            overflow: hidden; transition: 0.3s; border: 4px solid #000; 
+            cursor: pointer; box-shadow: 10px 10px 0 #000;
+        }
+        .game-card:hover { transform: translateY(-8px); box-shadow: 15px 15px 0 #000; }
+        .game-card img { width: 100%; height: 220px; object-fit: cover; border-bottom: 4px solid #000; }
+        .game-info h3 { margin: 15px 0; font-size: 1.4em; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* HEADER & GRID */
-        h1 { color: #000; text-transform: uppercase; letter-spacing: 5px; margin: 40px 0; font-size: 3.5em; text-shadow: 3px 3px 0px #fff; }
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1400px; margin: 0 auto; }
-        .game-card { background: rgba(255, 255, 255, 0.9); border-radius: 25px; overflow: hidden; transition: 0.4s; border: 4px solid #000; cursor: pointer; box-shadow: 8px 8px 0 #000; }
-        .game-card:hover { transform: translateY(-15px) rotate(2deg); box-shadow: 12px 12px 0 #000; background: #fff; }
-        .game-card img { width: 100%; height: 250px; object-fit: cover; border-bottom: 4px solid #000; }
+        /* FOOTER KIỂU HIỆN ĐẠI */
+        footer {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #fff; border-top: 3px solid #000;
+            padding: 15px 0; z-index: 1000;
+            display: flex; flex-direction: column; gap: 5px;
+            cursor: default;
+        }
+        .footer-line { font-size: 0.9em; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        .footer-email { font-size: 0.85em; color: #555; text-decoration: none; font-family: monospace; }
+        .footer-email:hover { color: #000; text-decoration: underline; }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1002; }
-        .modal-content { width: 95%; height: 85%; margin: 3% auto; background: #000; border: 5px solid #fff; border-radius: 20px; position: relative; overflow: hidden; }
+        /* MODAL CHƠI GAME */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1002; }
+        .modal-content { width: 96%; height: 90%; margin: 1% auto; background: #000; border: 4px solid #fff; border-radius: 15px; position: relative; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
-        .close-btn { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 35px; cursor: pointer; font-weight: bold; }
+        .close-btn { position: absolute; top: 10px; right: 20px; color: #fff; font-size: 30px; cursor: pointer; }
 
-        .footer {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
-            background: #000; color: #fff; display: flex; align-items: center; justify-content: center;
-            font-size: 1.4em; font-weight: bold; letter-spacing: 2px; z-index: 999;
-        }
     </style>
 </head>
-<body>
+<body onclick="changeBg(event)">
 
     <audio id="bg-music"></audio>
 
-    <div class="music-wrapper">
-        <div id="music-control" onclick="toggleMusic()">🎵</div>
-        <div class="music-text">Nếu muốn nghe nhạc 👉👍</div>
+    <div class="music-panel" onclick="event.stopPropagation()">
+        <div id="play-btn" class="music-btn" onclick="toggleMusic()">▶️</div>
+        <div class="music-btn" onclick="nextTrack()">⏭️</div>
     </div>
 
     <h1>🎮 GAME ĐẦU BÒ</h1>
 
-    <div class="game-grid">
+    <div class="game-grid" onclick="event.stopPropagation()">
+        <div class="game-card" onclick="openGame('https://frayfight.com/game/')">
+            <img src="fray-fight-bua.png" alt="Fray Fight">
+            <div class="game-info"><h3>Fray Fight</h3><p>Chiến đấu sinh tồn cực đỉnh</p></div>
+        </div>
+
         <div class="game-card" onclick="openGame('https://mrmine.com/game/')">
             <img src="mr-mine-bua.png" alt="Mr. Mine">
             <div class="game-info"><h3>Mr. Mine</h3><p>Khai thác hầm mỏ vô tận</p></div>
         </div>
+
         <div class="game-card" onclick="openGame('https://cdn.clickerheroes.com/gamebuild/index.php')">
             <img src="clicker-heroes-bua.png" alt="Clicker Heroes">
             <div class="game-info"><h3>Clicker Heroes</h3><p>Huyền thoại dòng game Idle</p></div>
         </div>
+
         <div class="game-card" onclick="openGame('https://playsaurus.com/kongPokerQuest63/')">
             <img src="poker-quest-bua.png" alt="Poker Quest">
             <div class="game-info"><h3>Poker Quest</h3><p>Chiến thuật thẻ bài Poker</p></div>
         </div>
+
         <div class="game-card" onclick="openGame('https://grindcraft.com/game.php')">
             <img src="grindcraft-bua.png" alt="Grindcraft">
             <div class="game-info"><h3>Grindcraft</h3><p>Chế tạo và xây dựng thế giới</p></div>
@@ -115,12 +133,18 @@
         </div>
     </div>
 
-    <div class="footer">WEB ĐƯỢC THIẾT KẾ BỞI NAM KHÔNG HỀO</div>
+    <footer onclick="event.stopPropagation()">
+        <div class="footer-line">Designed by Nam ko Hề</div>
+        <a href="mailto:svdrecdivo@gmal.com" class="footer-email">svdrecdivo@gmal.com</a>
+    </footer>
 
     <script>
-        // 1. NỀN NGẪU NHIÊN
-        const colors = ['linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%)','linear-gradient(160deg, #00DBDE 0%, #FC00FF 100%)','linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%)','linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%)','linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)'];
-        document.body.style.background = colors[Math.floor(Math.random() * colors.length)];
+        // 1. CLICK ĐỔI NỀN NGẪU NHIÊN
+        const colors = ['#fdfcf0', '#e3f2fd', '#fce4ec', '#f1f8e9', '#fff3e0', '#f3e5f5', '#e0f2f1', '#fffde7'];
+        function changeBg(e) {
+            document.body.style.background = colors[Math.floor(Math.random() * colors.length)];
+        }
+        document.body.style.background = colors[0];
 
         // 2. MEME RƠI
         const memeImages = ['meme1.png','meme2.png','meme3.png','meme4.png','meme5.png'];
@@ -128,51 +152,42 @@
             const particle = document.createElement('img');
             particle.classList.add('particle');
             particle.src = memeImages[Math.floor(Math.random() * memeImages.length)];
-            const size = Math.random() * 50 + 50 + 'px';
+            const size = Math.random() * 40 + 40 + 'px';
             particle.style.width = size;
             particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.animationDuration = Math.random() * 5 + 3 + 's';
+            particle.style.animationDuration = Math.random() * 4 + 3 + 's';
             document.body.appendChild(particle);
-            setTimeout(() => { particle.remove(); }, 8000);
+            setTimeout(() => { particle.remove(); }, 7000);
         }
-        setInterval(createParticle, 500);
+        setInterval(createParticle, 700);
 
-        // 3. MÁY NGHE NHẠC CHUYỂN BÀI (PLAYLIST)
+        // 3. ĐIỀU KHIỂN NHẠC
         const playlist = ['nhac1.mp3', 'nhac2.mp3', 'nhac3.mp3'];
         let currentTrack = 0;
         const music = document.getElementById('bg-music');
-        const musicBtn = document.getElementById('music-control');
-        
-        // Load bài đầu tiên
+        const playBtn = document.getElementById('play-btn');
         music.src = playlist[currentTrack];
 
         function toggleMusic() {
             if (music.paused) {
                 music.play();
-                musicBtn.classList.add('playing');
-                musicBtn.innerText = '⏸️';
+                playBtn.innerText = '⏸️';
+                playBtn.classList.add('playing');
             } else {
-                // Click khi đang chơi -> Chuyển sang bài kế tiếp
-                currentTrack++;
-                if (currentTrack >= playlist.length) {
-                    currentTrack = 0; // Quay lại bài 1
-                }
-                music.src = playlist[currentTrack];
-                music.play();
-                musicBtn.classList.add('playing');
-                musicBtn.innerText = '⏸️';
+                music.pause();
+                playBtn.innerText = '▶️';
+                playBtn.classList.remove('playing');
             }
         }
 
-        // Tự động chuyển bài khi hết nhạc
-        music.onended = function() {
-            currentTrack++;
-            if (currentTrack >= playlist.length) {
-                currentTrack = 0;
-            }
+        function nextTrack() {
+            currentTrack = (currentTrack + 1) % playlist.length;
             music.src = playlist[currentTrack];
             music.play();
-        };
+            playBtn.innerText = '⏸️';
+            playBtn.classList.add('playing');
+        }
+        music.onended = nextTrack;
 
         function openGame(url) {
             document.getElementById('gameFrame').src = url;
