@@ -28,7 +28,7 @@
             background-image: 
                 linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
-            background-size: 50px 50px; /* Độ rộng của lưới */
+            background-size: 50px 50px;
             z-index: -2;
             pointer-events: none;
         }
@@ -65,6 +65,7 @@
         .game-card { 
             border: 6px solid #000; border-radius: 25px; overflow: hidden; 
             background: #fff; box-shadow: 15px 15px 0 #000; transition: 0.3s;
+            cursor: pointer;
         }
         .game-card:hover { transform: translateY(-10px) rotate(1deg); }
         .game-card img { width: 100%; height: 220px; object-fit: cover; border-bottom: 6px solid #000; }
@@ -153,34 +154,38 @@
     </footer>
 
     <script>
-        // GIỮ NGUYÊN TOÀN BỘ LOGIC SCRIPT GỐC
+        // LOGIC NHẠC - ĐÃ KIỂM TRA LẠI ID
         let list = ['nhac1.mp3', 'nhac2.mp3', 'nhac3.mp3'];
         let idx = 0;
         let player = document.getElementById('track');
         player.src = list[idx];
 
         function toggleM() {
-            if (player.paused) { player.play(); } 
+            if (player.paused) { player.play().catch(e => console.log("Cần click vào web trước để phát nhạc")); } 
             else { player.pause(); }
         }
+
         function nextM() {
             idx = (idx + 1) % list.length;
             player.src = list[idx];
             player.play();
         }
 
+        // CLICK VÀO NỀN ĐỂ BẬT/TẮT NHẠC
         document.addEventListener('click', function(e) {
             if(e.target.id === "bg-target") {
                 toggleM();
             }
         });
 
+        // ĐỔI MÀU NỀN
         let palette = ['#fdfcf0', '#e3f2fd', '#fce4ec', '#f1f8e9', '#fff3e0', '#f3e5f5', '#e0f2f1'];
         setInterval(() => {
             const newColor = palette[Math.floor(Math.random() * palette.length)];
             document.body.style.background = newColor;
         }, 4000);
 
+        // MEME RƠI - ĐẢM BẢO CHẠY LIÊN TỤC
         let memes = ['meme1.png','meme2.png','meme3.png','meme4.png','meme5.png'];
         function drop() {
             let img = document.createElement('img');
@@ -194,6 +199,7 @@
         }
         setInterval(drop, 1600);
 
+        // HIỂN THỊ GAME TRONG MODAL
         function show(link) {
             document.getElementById('game-ifr').src = link;
             document.getElementById('modal-game').style.display = 'block';
