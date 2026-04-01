@@ -8,88 +8,74 @@
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, sans-serif; 
-            color: #000; 
-            text-align: center; 
-            margin: 0; 
-            padding: 20px; 
-            padding-bottom: 150px; 
-            overflow-x: hidden;
-            transition: background 0.5s ease;
-            min-height: 100vh;
-            cursor: pointer;
+            margin: 0; padding: 20px; padding-bottom: 150px; 
+            overflow-x: hidden; min-height: 100vh;
+            transition: background 3s ease; /* Nền chuyển màu mượt mà */
             background-color: #fdfcf0;
         }
 
-        /* MEME RƠI */
+        /* MEME RƠI - LÀM TO HƠN */
         .particle {
-            position: fixed; top: -150px; z-index: -1;
+            position: fixed; top: -200px; z-index: 1005;
             user-select: none; pointer-events: none;
             animation: fall linear infinite;
-            border-radius: 10px; border: 2px solid #000;
-            background: #fff; padding: 5px;
+            border: 3px solid #000; background: #fff; padding: 8px;
+            border-radius: 15px;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.2);
         }
-        @keyframes fall { to { transform: translateY(120vh) rotate(360deg); } }
+        @keyframes fall { to { transform: translateY(125vh) rotate(360deg); } }
 
-        /* NHẠC */
+        /* BỘ ĐIỀU KHIỂN */
         .music-panel {
             position: fixed; bottom: 30px; left: 30px;
-            display: flex; gap: 12px; z-index: 1001;
+            display: flex; gap: 15px; z-index: 2001;
             background: rgba(255, 255, 255, 0.9);
-            padding: 12px; border: 3px solid #000;
-            border-radius: 50px; box-shadow: 6px 6px 0 #000;
+            padding: 15px; border: 4px solid #000;
+            border-radius: 50px; box-shadow: 8px 8px 0 #000;
         }
         .music-btn {
-            width: 50px; height: 50px;
-            background: #fff; border: 2px solid #000;
-            border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px; transition: 0.2s;
+            width: 55px; height: 55px; background: #fff; border: 3px solid #000;
+            border-radius: 50%; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 22px;
         }
-        .music-btn:active { transform: scale(0.9); }
         .playing { animation: spin 4s linear infinite; background: #00ffcc !important; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         h1 { 
-            color: #000; text-transform: uppercase; letter-spacing: 5px; 
-            margin: 50px 0; font-size: 3.2em; text-shadow: 3px 3px 0px #fff;
+            font-size: 3.5em; text-transform: uppercase; letter-spacing: 5px;
             display: flex; align-items: center; justify-content: center; gap: 20px;
-            pointer-events: none;
+            margin: 50px 0; text-shadow: 4px 4px 0 #fff;
         }
 
         .game-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; max-width: 1300px; margin: 0 auto;
         }
         .game-card { 
-            background: #fff; border-radius: 20px; 
-            overflow: hidden; transition: 0.3s; border: 4px solid #000; 
-            cursor: pointer; box-shadow: 8px 8px 0 #000;
+            background: #fff; border-radius: 20px; border: 4px solid #000; 
+            overflow: hidden; cursor: pointer; box-shadow: 10px 10px 0 #000;
+            transition: 0.3s;
         }
-        .game-card:hover { transform: translateY(-8px); }
-        .game-card img { width: 100%; height: 180px; object-fit: cover; border-bottom: 4px solid #000; }
+        .game-card:hover { transform: translateY(-10px); }
+        .game-card img { width: 100%; height: 200px; object-fit: cover; border-bottom: 4px solid #000; }
 
         footer {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #fff; border-top: 3px solid #000;
-            padding: 12px 0; z-index: 1000;
+            background: #fff; border-top: 4px solid #000; padding: 15px 0; z-index: 2000;
         }
-        .footer-line { font-size: 0.9em; font-weight: bold; text-transform: uppercase; }
-        .footer-email { font-size: 0.8em; color: #666; text-decoration: none; }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; }
-        .modal-content { width: 95%; height: 85%; margin: 2% auto; background: #000; border: 3px solid #fff; position: relative; }
-        .close-btn { position: absolute; top: -40px; right: 0; color: #fff; font-size: 25px; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 3000; }
+        .modal-content { width: 95%; height: 90%; margin: 1% auto; position: relative; border: 5px solid #fff; }
+        .close-btn { position: absolute; top: -45px; right: 0; color: #fff; font-size: 30px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body id="main-body">
 
-    <audio id="bg-music" preload="auto"></audio>
+    <audio id="bg-music" loop></audio>
 
     <div class="music-panel">
-        <div id="play-btn" class="music-btn" onclick="toggleMusic(event)">▶️</div>
-        <div class="music-btn" onclick="nextTrack(event)">⏭️</div>
+        <div id="play-btn" class="music-btn" onclick="toggleMusic()">▶️</div>
+        <div class="music-btn" onclick="nextTrack()">⏭️</div>
     </div>
 
     <h1>🎮 GAME ĐẦU BÒ 🎮</h1>
@@ -97,23 +83,23 @@
     <div class="game-grid">
         <div class="game-card" onclick="openGame('https://frayfight.com/game/')">
             <img src="fray-fight-bua.png">
-            <div class="game-info"><h3>Fray Fight</h3></div>
+            <h3>Fray Fight</h3>
         </div>
         <div class="game-card" onclick="openGame('https://mrmine.com/game/')">
             <img src="mr-mine-bua.png">
-            <div class="game-info"><h3>Mr. Mine</h3></div>
+            <h3>Mr. Mine</h3>
         </div>
         <div class="game-card" onclick="openGame('https://cdn.clickerheroes.com/gamebuild/index.php')">
             <img src="clicker-heroes-bua.png">
-            <div class="game-info"><h3>Clicker Heroes</h3></div>
+            <h3>Clicker Heroes</h3>
         </div>
         <div class="game-card" onclick="openGame('https://playsaurus.com/kongPokerQuest63/')">
             <img src="poker-quest-bua.png">
-            <div class="game-info"><h3>Poker Quest</h3></div>
+            <h3>Poker Quest</h3>
         </div>
         <div class="game-card" onclick="openGame('https://grindcraft.com/game.php')">
             <img src="grindcraft-bua.png">
-            <div class="game-info"><h3>Grindcraft</h3></div>
+            <h3>Grindcraft</h3>
         </div>
     </div>
 
@@ -125,43 +111,35 @@
     </div>
 
     <footer>
-        <div class="footer-line">Designed by Nam Tran ko Hề </div>
-        <a href="mailto:svdrecdivo@gmal.com" class="footer-email">svdrecdivo@gmal.com</a>
+        <div style="font-weight: bold;">DESIGNED BY NAM TRAN ko Hề</div>
+        <div style="font-size: 0.8em; color: #666;">svdrecdivo@gmal.com</div>
     </footer>
 
     <script>
-        // 1. ĐỔI MÀU NỀN - Gán trực tiếp vào sự kiện click của body
-        const colors = ['#fdfcf0', '#e3f2fd', '#fce4ec', '#f1f8e9', '#fff3e0', '#f3e5f5', '#e0f2f1', '#fffde7'];
-        document.getElementById('main-body').addEventListener('click', function(e) {
-            // Chỉ đổi màu khi click vào vùng trống (nền), không click vào nút nhạc/game
-            if (e.target.tagName === 'BODY' || e.target.tagName === 'H1') {
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                this.style.background = randomColor;
-            }
-        });
-
-        // 2. NHẠC
         const playlist = ['nhac1.mp3', 'nhac2.mp3', 'nhac3.mp3'];
         let currentTrack = 0;
         const music = document.getElementById('bg-music');
         const playBtn = document.getElementById('play-btn');
+        let hasInteracted = false;
+
         music.src = playlist[currentTrack];
 
-        function toggleMusic(e) {
-            e.stopPropagation(); // Ngăn đổi màu nền khi bấm nút nhạc
-            if (music.paused) {
-                music.play().catch(err => alert("Hãy tương tác với trang web trước khi phát nhạc!"));
+        // TỰ ĐỘNG PHÁT KHI CLICK BẤT KỲ ĐÂU LẦN ĐẦU
+        document.body.addEventListener('click', () => {
+            if (!hasInteracted) {
+                music.play().catch(() => {});
                 playBtn.innerText = '⏸️';
                 playBtn.classList.add('playing');
-            } else {
-                music.pause();
-                playBtn.innerText = '▶️';
-                playBtn.classList.remove('playing');
+                hasInteracted = true;
             }
+        }, { once: true });
+
+        function toggleMusic() {
+            if (music.paused) { music.play(); playBtn.innerText = '⏸️'; playBtn.classList.add('playing'); }
+            else { music.pause(); playBtn.innerText = '▶️'; playBtn.classList.remove('playing'); }
         }
 
-        function nextTrack(e) {
-            e.stopPropagation();
+        function nextTrack() {
             currentTrack = (currentTrack + 1) % playlist.length;
             music.src = playlist[currentTrack];
             music.play();
@@ -169,13 +147,38 @@
             playBtn.classList.add('playing');
         }
 
-        music.onended = function() { nextTrack({stopPropagation: () => {}}); };
+        // TỰ ĐỘNG ĐỔI MÀU NỀN MỖI 3 GIÂY
+        const colors = ['#fdfcf0', '#e3f2fd', '#fce4ec', '#f1f8e9', '#fff3e0', '#f3e5f5', '#e0f2f1', '#fffde7'];
+        setInterval(() => {
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.background = randomColor;
+        }, 3000);
 
-        // 3. MEME RƠI
+        // MEME RƠI - KÍCH THƯỚC TO
         const memeImages = ['meme1.png','meme2.png','meme3.png','meme4.png','meme5.png'];
-        function createParticle() {
-            const particle = document.createElement('img');
-            particle.classList.add('particle');
-            particle.src = memeImages[Math.floor(Math.random() * memeImages.length)];
-            particle.style.width = (Math.random() * 40 + 40) + 'px';
-            particle.style.left = Math.random() * 1
+        function createMeme() {
+            const m = document.createElement('img');
+            m.className = 'particle';
+            m.src = memeImages[Math.floor(Math.random() * memeImages.length)];
+            const size = Math.random() * 60 + 80; // To từ 80px đến 140px
+            m.style.width = size + 'px';
+            m.style.left = Math.random() * 100 + 'vw';
+            m.style.animationDuration = Math.random() * 3 + 4 + 's';
+            document.body.appendChild(m);
+            setTimeout(() => m.remove(), 8000);
+        }
+        setInterval(createMeme, 1200);
+
+        function openGame(url) {
+            document.getElementById('gameFrame').src = url;
+            document.getElementById('gameModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeGame() {
+            document.getElementById('gameModal').style.display = 'none';
+            document.getElementById('gameFrame').src = '';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
